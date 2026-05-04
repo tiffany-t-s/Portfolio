@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% import 'bootstrap_wtf.html' as wtf %}
+
+{% block content %}
+
+    <h1>Welcome to Smile Portal!</h1>
+    <!-- TODO: (milestone1) Display smile count.   -->
+    <h3>Number of smiles: 
+        {{posts | length}}
+    </h3>
+
+    <!-- TODO: (milestone 2) Add the template to render an instance of a `sortForm`. The form should display the sort attribute select box and the "Refresh" submit button.
+            Style the `sortorder` form element using the `formselect` CSS element we defined in milestone1 -->
+    <div>
+        {% if form %}
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+                <span><b> {{wtf.form_field(form.selection)}} </b></span>
+                <span> {{wtf.form_field(form.my_posts)}} </span>
+                <span> {{wtf.form_field(form.submit)}} </span>
+            </form>
+        {% endif %}
+    </div>
+    <!-- TODO: (milestone1) Format posts -->
+    <div class="postlist">
+    {% for post in posts %}
+        <div class="post-box"> {% include '_post.html' %} </div>
+    {% endfor %}</div>
+  
+{% endblock %}

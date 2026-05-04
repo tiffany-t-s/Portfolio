@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% import 'bootstrap_wtf.html' as wtf %}
+
+{% block content %}
+
+    <h1>Post New Smile</h1>
+
+    {% if form %}
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <!--Displays the form item for the post's `title`.--> 
+            <p>
+            {{wtf.form_field(form.title)}}<br>
+            <!-- TODO: (milestone 1) Display the error messages of the `title` field validator (if there are any validation errors).   -->  
+            {% for error in form.title.errors %}
+                <span style="color: crimson;">"Please enter a title for the post!" [{{ error }}]</span>
+            {% endfor %}</p>
+            <!-- TODO: (milestone1) Include the form item for the post's `body`. Apply appropriate styling for the `body`form  item.  -->  
+            <p>
+            {{wtf.form_field(form.body)}}<br>
+            <!-- TODO: (milestone 1) Display the error messages of the `body` field validator (if there are any validation errors).   -->  
+            {% for error in form.body.errors %}
+                <span style="color: crimson;">"Please enter a body for the post!" [{{ error}}]</span>
+            {% endfor %}</p>
+            <!-- TODO: (milestone1) Include the form item for `happiness_level` selection. Apply appropriate styling for the `happiness_level` form item.  -->  
+            <p><br>
+            {{wtf.form_field(form.happiness_level)}}<br></p>
+            <!-- TODO: (milestone2) Include the form item for `tag` selection.   -->  
+            <p>
+            {{wtf.form_field(form.tag)}}<br></p>
+
+            <p>{{wtf.form_field(form.submit)}}</p>
+        </form>
+    {% endif %}
+
+
+  {% endblock %}

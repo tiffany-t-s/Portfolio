@@ -1,0 +1,90 @@
+<!-- We add an id for the table to update the HTML content of the table through JavaScript.  -->
+<table id="post-{{post.id}}" class = "posttable" style = "width:100%" valign="top">
+        <tr> 
+            <td colspan="3"><div class="posttitle"> {{post.title}} </div>
+            </td>
+        </tr>
+        <tr>
+            <td width="10%" >
+                <!--  (milestone1) TODO: include happiness-level image according to the `cost`s happiness_level .
+                For example :  <img src="{{ url_for('static', filename = 'img//happiness-level-1.png' )}}"  /> "--> 
+                {% if post.happiness_level == 1 %}
+                    <img src="{{ url_for('static', filename = 'img//happiness-level-1.png' )}}"  width = 80% />
+                {% elif post.happiness_level == 2 %}
+                    <img src="{{ url_for('static', filename = 'img//happiness-level-2.png' )}}"  width = 80% />
+                {% elif post.happiness_level == 3 %}
+                    <img src="{{ url_for('static', filename = 'img//happiness-level-3.png' )}}"  width = 80% /> 
+                {% endif %}
+            </td>
+            <td width = "80%" >
+                <!--  TODO: include post body in the following div element and style it. -->    
+                <div class="postmessage" style="max-width: fit-content;"> {{post.body}} </div>
+                <!-- (milestone3) TODO: format the timestamp; display as local date/time-->
+                <div class="posttimestamp" style="max-width: fit-content;">Posted at: {{moment(post.timestamp).format('LLL')}} </div>
+            </td> 
+            <td width = "5%">
+                <div>
+                    <!-- (milestone1)  TODO: add "like" button
+                        Define an HTML `post` form with a submit button. The form action should redirect to `routes.like` route.
+                        Style the submit button using `likebtn` CCS class selector. -->
+                    <div>
+                        <!-- <form action="{{url_for('main.like', post_id = post.id)}}" method="post"> -->
+                        <button class="likebtn" onclick = "like_post({{post.id}})"></button>
+                        </form>  
+                    </div>       
+                    <br>
+                    <!-- (milestone1) TODO: include the likes count in the following div element. -->
+                    <div class="likecount"> {{post.likes}}</div>
+                </div> <br> 
+                {% if post.writer == current_user %}
+                 <!-- (milestone3) TODO: if the post is posted by the logged-in user, include the "delete" button.  
+                                   Define an HTML `post` form with a submit button. The form action should redirect to `routes.deletepost` route.
+                                   Style the submit button using `button` CCS class selector. -->
+                    <form action="{{url_for('main.delete_post', post_id = post.id)}}" method="post">
+                        <input type="submit" value="Delete" class="btn btn-warning">
+                    </form>
+                {% endif %}
+            </td>
+        </tr>
+        <tr> 
+            <td colspan="3" style = "text-align:center" valign="bottom">  
+                <br>
+                <!-- (milestone2) TODO: include all the tags associated with the post-->
+                {% for tag in post.get_tags() %}
+                    <span class="tagitem">{{tag.name}}</span>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" style = "text-align:center" valign="bottom">  
+                <br>
+                  <!-- (milestone3) TODO: include username who posted the post-->
+                   Posted by: <span class="useritem">{{post.writer.username}}</span>
+            </td>
+        </tr>
+    </table>
+
+<!-- (milestone3)  TODO: refactor the "like" use case. Add the JavaScript code below. -->
+{% block script %}
+<script>
+    async function like_post(post_id){
+        const url = "{{url_for('main.like', post_id = 'post_id')}}".replace('post_id', post_id);
+        try{
+            const response = await fetch(url);
+            if (!response.ok){
+                throw new Error(`Response status: ${response.status}`);
+            }
+            const json = await response.json();
+            console.log(json);
+            update_likes(post_id, json);
+        }catch(error){
+            console.error(error.message);
+        }
+    }
+    function update_likes(post_id , data){
+        let table = document.getElementById(`post-${post_id}`)
+        let counter = table.querySelector('.likecount')
+        counter.textContent = `${data['like_count']}`
+    }
+</script>    
+{% endblock %}

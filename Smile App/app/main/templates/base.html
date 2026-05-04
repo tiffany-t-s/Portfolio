@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% if title %}
+        <title>{{ title }} - Smile </title>
+    {% else %}
+        <title> Welcome to Smile Portal! </title>
+    {% endif %}
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+        crossorigin="anonymous">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    {{moment.include_moment()}}
+  </head>
+  <body>
+
+    <nav class="navbar navbar-light navbar-expand-lg border-bottom" style="background-color: #ffffff;">
+        <div class="container">
+          <a class="navbar-brand" href="{{ url_for('main.index') }}">Smile App</a>
+          <button class="navbar-toggler" type="button" >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item border border-warning px-3 ms-2 " >
+                <a class="nav-link" aria-current="page" href="{{ url_for('main.index') }}">Smiles</a>
+              </li>
+              {% if not current_user.is_anonymous %}
+              <!-- TODO: (milestone 1) add the URL for the "Post Smile". --> 
+              <li class="nav-item border border-warning px-2 ms-2 " >
+                <a class="nav-link" aria-current="page" href="{{ url_for('main.postsmile')}}"> Post Smile </a>
+              </li>
+              <li class="nav-item border border-warning px-2 ms-2 " >
+                <!-- TODO: (milestone 3) Replace "_______" below with the username of the current user. Current user should be displayed only if there is a logged in user. -->
+                <a class="nav-link" aria-current="page">Current user is: <span class="useritem">{{current__user.username}}</span></a> 
+              </li>
+              {% endif %}
+            </ul>
+            <ul class="navbar-nav mb-2 mb-lg-0">
+              <!-- TODO: (milestone 3) add the "Login" or "Logous" link. If the user is logged in, Login link should be displayed, otherwise Logout link should be displayed. --> 
+              {% if current_user.is_anonymous %}
+              <li class="nav-item border border-warning px-2 ms-2" >
+                <a class="nav-link" aria-current="page" href="{{ url_for('auth.register') }}">Register</a>
+              </li>
+              <li class="nav-item border border-warning px-2 ms-2" >
+                <a class="nav-link" aria-current="page" href="{{ url_for('auth.login') }}">Login</a>
+              </li>
+              {% else %}
+              <li class="nav-item border border-warning px-2 ms-2" >
+                <a class="nav-link" aria-current="page" href="{{ url_for('auth.logout') }}">Logout</a>
+              </li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      
+    <div class="container mt-3">
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+        <!-- TODO: (milestone 1) - apply styling for the flash messages (can apply it to the following div element). --> 
+        <div class="alert alert-info" role="alert" style="background: #8be767">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </div>
+    <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous">
+    </script>
+</body>
+</html>

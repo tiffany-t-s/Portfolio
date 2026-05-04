@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% import 'bootstrap_wtf.html' as wtf %}
+
+{% block content %}
+    <h1>Register</h1>
+
+    <!-- TODO: (milestone 3) Include the template for "user registration" form here..  -->
+     <form action = "{{url_for('auth.register')}}" method = "POST">
+        {{form.hidden_tag()}}
+
+        <p>
+        {{wtf.form_field(form.username)}}<br>
+        {% for error in form.username.errors %}
+            <span style="color: crimson;">"Please enter a username!" [{{ error }}]</span>
+        {% endfor %}</p>
+        
+        <p>
+        {{wtf.form_field(form.email)}}<br>
+        {% for error in form.email.errors %}
+            <span style="color: crimson;">"Please enter your email!" [{{ error }}]</span>
+        {% endfor %}</p>
+        
+        <p>
+        {{wtf.form_field(form.password)}}<br>
+        {% for error in form.password.errors %}
+            <span style="color: crimson;">"Please enter a password!" [{{ error }}]</span>
+        {% endfor %}</p>
+        
+        <p>
+        {{wtf.form_field(form.password2)}}<br>
+        {% for error in form.password2.errors %}
+            <span style="color: crimson;">"Please reenter the same password!" [{{ error }}]</span>
+        {% endfor %}</p>
+        
+        <p>{{wtf.form_field(form.submit)}}</p>
+     </form>
+
+{% endblock %}
